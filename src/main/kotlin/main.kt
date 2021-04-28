@@ -16,6 +16,24 @@ fun main() {
                 println("프로그램을 종료합니다.")
                 break
             }
+            "/member/join" -> {
+                print("로그인아이디 : ")
+                val loginId = readLineTrim()
+                print("로그인비밀번호 : ")
+                val loginPw = readLineTrim()
+                print("이름 : ")
+                val name = readLineTrim()
+                print("별명 : ")
+                val nickname = readLineTrim()
+                print("휴대전화번호 : ")
+                val cellphoneNo = readLineTrim()
+                print("이메일 : ")
+                val email = readLineTrim()
+
+                val id = memberRepository.join(loginId, loginPw, name, nickname, cellphoneNo, email)
+
+                println("${id}번 회원으로 가입되었습니다.")
+            }
             "/article/write" -> {
                 print("제목 : ")
                 val title = readLineTrim()
@@ -176,6 +194,44 @@ class Rq(command: String) {
         }
     }
 }
+
+// 회원 관련 시작
+data class Member(
+    val id: Int,
+    val regDate: String,
+    var updateDate: String,
+    var loginId: String,
+    var loginPw: String,
+    var name: String,
+    var nickname: String,
+    var cellphoneNo: String,
+    var email: String
+)
+
+object memberRepository {
+    private val members = mutableListOf<Member>()
+    private var lastId = 0
+
+    fun join(
+        loginId: String,
+        loginPw: String,
+        name: String,
+        nickname: String,
+        cellphoneNo: String,
+        email: String
+    ): Int {
+        val id = ++lastId
+        val regDate = Util.getNowDateStr()
+        val updateDate = Util.getNowDateStr()
+        members.add(Member(id, regDate, updateDate, loginId, loginPw, name, nickname, cellphoneNo, email))
+
+        println(members)
+
+        return id
+    }
+
+}
+// 회원 관련 끝
 
 // 게시물 관련 시작
 data class Article(
