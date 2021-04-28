@@ -44,6 +44,30 @@ fun main() {
                 println("제목 : ${article.title}")
                 println("내용 : ${article.body}")
             }
+            "/article/modify" -> {
+                val id = rq.getIntParam("id", 0)
+
+                if (id == 0) {
+                    println("id를 입력해주세요.")
+                    continue
+                }
+
+                val article = articleRepository.getArticleById(id)
+
+                if (article == null) {
+                    println("${id}번 게시물은 존재하지 않습니다.")
+                    continue
+                }
+
+                print("${id}번 게시물 새 제목 : ")
+                val title = readLineTrim()
+                print("${id}번 게시물 새 내용 : ")
+                val body = readLineTrim()
+
+                articleRepository.modifyArticle(id, title, body)
+
+                println("${id}번 게시물이 수정되었습니다.")
+            }
             "/article/delete" -> {
                 val id = rq.getIntParam("id", 0)
 
@@ -142,9 +166,9 @@ class Rq(command: String) {
 data class Article(
     val id: Int,
     val regDate: String,
-    val updateDate: String,
-    val title: String,
-    val body: String
+    var updateDate: String,
+    var title: String,
+    var body: String
 )
 
 object articleRepository {
@@ -180,6 +204,14 @@ object articleRepository {
 
     fun getArticles(): List<Article> {
         return articles
+    }
+
+    fun modifyArticle(id: Int, title: String, body: String) {
+        val article = getArticleById(id)!!
+
+        article.title = title
+        article.body = body
+        article.updateDate = Util.getNowDateStr()
     }
 }
 // 게시물 관련 끝
