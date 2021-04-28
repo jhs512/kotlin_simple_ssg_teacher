@@ -79,12 +79,17 @@ fun main() {
                 println("${id}번 회원으로 가입되었습니다.")
             }
             "/article/write" -> {
+                if (loginedMember == null) {
+                    println("로그인 후 이용해주세요.")
+                    continue
+                }
+
                 print("제목 : ")
                 val title = readLineTrim()
                 print("내용 : ")
                 val body = readLineTrim()
 
-                val id = articleRepository.addArticle(title, body)
+                val id = articleRepository.addArticle(loginedMember.id, title, body)
 
                 println("${id}번 게시물이 추가되었습니다.")
             }
@@ -302,6 +307,7 @@ data class Article(
     val id: Int,
     val regDate: String,
     var updateDate: String,
+    val memberId: Int,
     var title: String,
     var body: String
 )
@@ -324,18 +330,19 @@ object articleRepository {
         return null
     }
 
-    fun addArticle(title: String, body: String): Int {
+    fun addArticle(memberId: Int, title: String, body: String): Int {
         val id = ++lastId
         val regDate = Util.getNowDateStr()
         val updateDate = Util.getNowDateStr()
-        articles.add(Article(id, regDate, updateDate, title, body))
+
+        articles.add(Article(id, regDate, updateDate, memberId, title, body))
 
         return id
     }
 
     fun makeTestArticles() {
         for (id in 1..100) {
-            addArticle("제목_$id", "내용_$id")
+            addArticle(id % 9 + 1, "제목_$id", "내용_$id")
         }
     }
 
