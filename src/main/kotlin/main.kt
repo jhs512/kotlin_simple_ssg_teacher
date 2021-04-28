@@ -16,6 +16,13 @@ fun main() {
                 println("프로그램을 종료합니다.")
                 break
             }
+            "/article/list" -> {
+                println("번호 / 작성날짜 / 갱신날짜 / 제목 / 내용")
+
+                for (article in articleRepository.getArticles().reversed()) {
+                    println("${article.id} / ${article.regDate} / ${article.updateDate} / ${article.title}")
+                }
+            }
             "/article/detail" -> {
                 val id = rq.getIntParam("id", 0)
 
@@ -24,9 +31,35 @@ fun main() {
                     continue
                 }
 
-                val article = articleRepository.articles[id - 1]
+                val article = articleRepository.getArticleById(id)
 
-                println(article)
+                if (article == null) {
+                    println("${id}번 게시물은 존재하지 않습니다.")
+                    continue
+                }
+
+                println("번호 : ${article.id}")
+                println("작성날짜 : ${article.regDate}")
+                println("갱신날짜 : ${article.updateDate}")
+                println("제목 : ${article.title}")
+                println("내용 : ${article.body}")
+            }
+            "/article/delete" -> {
+                val id = rq.getIntParam("id", 0)
+
+                if (id == 0) {
+                    println("id를 입력해주세요.")
+                    continue
+                }
+
+                val article = articleRepository.getArticleById(id)
+
+                if (article == null) {
+                    println("${id}번 게시물은 존재하지 않습니다.")
+                    continue
+                }
+
+                articleRepository.deleteArticle(article)
             }
         }
     }
@@ -115,8 +148,22 @@ data class Article(
 )
 
 object articleRepository {
-    val articles = mutableListOf<Article>()
-    var lastId = 0
+    private val articles = mutableListOf<Article>()
+    private var lastId = 0
+
+    fun deleteArticle(article: Article) {
+        articles.remove(article)
+    }
+
+    fun getArticleById(id: Int): Article? {
+        for (article in articles) {
+            if (article.id == id) {
+                return article
+            }
+        }
+
+        return null
+    }
 
     fun addArticle(title: String, body: String) {
         val id = ++lastId
@@ -129,6 +176,10 @@ object articleRepository {
         for (id in 1..100) {
             addArticle("제목_$id", "내용_$id")
         }
+    }
+
+    fun getArticles(): List<Article> {
+        return articles
     }
 }
 // 게시물 관련 끝
