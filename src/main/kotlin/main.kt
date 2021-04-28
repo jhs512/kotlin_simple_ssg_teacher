@@ -24,6 +24,11 @@ fun main() {
                 println("프로그램을 종료합니다.")
                 break
             }
+            "/member/logout" -> {
+                isLogined = false
+
+                println("로그아웃 되었습니다.")
+            }
             "/member/login" -> {
                 print("로그인아이디 : ")
                 val loginId = readLineTrim()
