@@ -3,6 +3,7 @@ import java.text.SimpleDateFormat
 fun main() {
     println("== SIMPLE SSG 시작 ==")
 
+    memberRepository.makeTestMembers()
     articleRepository.makeTestArticles()
 
     while (true) {
@@ -19,6 +20,14 @@ fun main() {
             "/member/join" -> {
                 print("로그인아이디 : ")
                 val loginId = readLineTrim()
+
+                val isJoinableLoginId = memberRepository.isJoinableLoginId(loginId)
+
+                if (isJoinableLoginId == false) {
+                    println("`$loginId`(은)는 이미 사용중인 로그인아이디 입니다.")
+                    continue
+                }
+
                 print("로그인비밀번호 : ")
                 val loginPw = readLineTrim()
                 print("이름 : ")
@@ -225,9 +234,29 @@ object memberRepository {
         val updateDate = Util.getNowDateStr()
         members.add(Member(id, regDate, updateDate, loginId, loginPw, name, nickname, cellphoneNo, email))
 
-        println(members)
-
         return id
+    }
+
+    fun isJoinableLoginId(loginId: String): Boolean {
+        val member = getMemberByLoginId(loginId)
+
+        return member == null
+    }
+
+    private fun getMemberByLoginId(loginId: String): Member? {
+        for (member in members) {
+            if (member.loginId == loginId) {
+                return member
+            }
+        }
+
+        return null
+    }
+
+    fun makeTestMembers() {
+        for (id in 1..9) {
+            join("user${id}", "user${id}", "user${id}_이름", "user${id}_별명", "0101234123${id}", "user${id}@test.com")
+        }
     }
 
 }
