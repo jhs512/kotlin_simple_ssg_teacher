@@ -99,10 +99,12 @@ fun main() {
 
                 val filteredArticles = articleRepository.getFilteredArticles(searchKeyword, page, 10)
 
-                println("번호 / 작성날짜 / 갱신날짜 / 제목 / 내용")
+                println("번호 / 작성날짜 / 작성자 / 제목 / 내용")
 
                 for (article in filteredArticles) {
-                    println("${article.id} / ${article.regDate} / ${article.updateDate} / ${article.title}")
+                    val writer = memberRepository.getMemberById(article.memberId)!!
+                    val writerName = writer.nickname
+                    println("${article.id} / ${article.regDate} / ${writerName} / ${article.title}")
                 }
             }
             "/article/detail" -> {
@@ -299,6 +301,16 @@ object memberRepository {
         }
     }
 
+    fun getMemberById(id: Int): Member? {
+        for (member in members) {
+            if (member.id == id) {
+                return member
+            }
+        }
+
+        return null
+    }
+
 }
 // 회원 관련 끝
 
@@ -341,7 +353,7 @@ object articleRepository {
     }
 
     fun makeTestArticles() {
-        for (id in 1..100) {
+        for (id in 1..20) {
             addArticle(id % 9 + 1, "제목_$id", "내용_$id")
         }
     }
