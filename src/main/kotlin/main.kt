@@ -6,8 +6,15 @@ fun main() {
     memberRepository.makeTestMembers()
     articleRepository.makeTestArticles()
 
+    var isLogined = false
+
     while (true) {
-        print("명령어) ")
+        val prompt = if (isLogined) {
+            "로그인됨) "
+        } else {
+            "명령어) "
+        }
+        print(prompt)
         val command = readLineTrim()
 
         val rq = Rq(command)
@@ -16,6 +23,29 @@ fun main() {
             "/system/exit" -> {
                 println("프로그램을 종료합니다.")
                 break
+            }
+            "/member/login" -> {
+                print("로그인아이디 : ")
+                val loginId = readLineTrim()
+
+                val member = memberRepository.getMemberByLoginId(loginId)
+
+                if (member == null) {
+                    println("`$loginId`(은)는 존재하지 않는 회원의 로그인아이디 입니다.")
+                    continue
+                }
+
+                print("로그인비밀번호 : ")
+                val loginPw = readLineTrim()
+
+                if (member.loginPw != loginPw) {
+                    println("비밀번호가 일치하지 않습니다.")
+                    continue
+                }
+
+                isLogined = true
+
+                println("${member.nickname}님 환영합니다.")
             }
             "/member/join" -> {
                 print("로그인아이디 : ")
@@ -243,7 +273,7 @@ object memberRepository {
         return member == null
     }
 
-    private fun getMemberByLoginId(loginId: String): Member? {
+    fun getMemberByLoginId(loginId: String): Member? {
         for (member in members) {
             if (member.loginId == loginId) {
                 return member
