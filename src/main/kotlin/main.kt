@@ -3,13 +3,11 @@ import java.text.SimpleDateFormat
 fun main() {
     println("== SIMPLE SSG 시작 ==")
 
-    val memberRepository = MemberRepository()
-    val articleRepository = ArticleRepository()
-
     memberRepository.makeTestMembers()
     articleRepository.makeTestArticles()
 
     val systemController = SystemController()
+    val boardController = BoardController()
     val articleController = ArticleController()
     val memberController = MemberController()
 
@@ -30,6 +28,9 @@ fun main() {
                 systemController.exit(rq)
 
                 break
+            }
+            "/board/list" -> {
+                boardController.list(rq)
             }
             "/member/logout" -> {
                 memberController.logout(rq)
@@ -137,6 +138,20 @@ var loginedMember: Member? = null
 // 세션 끝
 
 // 컨트롤러 시작
+// 게시판 컨트롤러 시작
+class BoardController {
+    fun list(rq: Rq) {
+        println("번호 / 생성날짜 / 이름 / 코드")
+
+        val boards = boardRepository.getFilteredBoards()
+
+        for (board in boards) {
+            println("${board.id} / ${board.regDate} / ${board.name} / ${board.code}")
+        }
+    }
+}
+// 게시판 컨트롤러 끝
+
 // 시스템 컨트롤러 시작
 class SystemController {
     fun exit(rq: Rq) {
@@ -399,6 +414,8 @@ class MemberRepository {
 
 }
 
+val memberRepository = MemberRepository()
+
 // 게시물 DTO
 data class Article(
     val id: Int,
@@ -490,6 +507,30 @@ class ArticleRepository {
         return filteredArticles
     }
 }
+
+val articleRepository = ArticleRepository()
+
+// 게시판 관련
+data class Board(
+    val id: Int,
+    val regDate: String,
+    var updateDate: String,
+    var name: String,
+    var code: String
+)
+
+class BoardRepository {
+    val boards = mutableListOf(
+        Board(1, Util.getNowDateStr(), Util.getNowDateStr(), "공지", "notice"),
+        Board(2, Util.getNowDateStr(), Util.getNowDateStr(), "자유", "free")
+    )
+
+    fun getFilteredBoards(): List<Board> {
+        return boards
+    }
+}
+
+val boardRepository = BoardRepository()
 
 // 유틸 관련 시작
 fun readLineTrim() = readLine()!!.trim()
