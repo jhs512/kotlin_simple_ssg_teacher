@@ -148,6 +148,11 @@ fun main() {
                     continue
                 }
 
+                if (article.memberId != loginedMember.id) {
+                    println("권한이 없습니다.")
+                    continue
+                }
+
                 print("${id}번 게시물 새 제목 : ")
                 val title = readLineTrim()
                 print("${id}번 게시물 새 내용 : ")
@@ -174,6 +179,11 @@ fun main() {
 
                 if (article == null) {
                     println("${id}번 게시물은 존재하지 않습니다.")
+                    continue
+                }
+
+                if (article.memberId != loginedMember.id) {
+                    println("권한이 없습니다.")
                     continue
                 }
 
