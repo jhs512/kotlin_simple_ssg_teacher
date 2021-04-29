@@ -3,6 +3,9 @@ import java.text.SimpleDateFormat
 fun main() {
     println("== SIMPLE SSG 시작 ==")
 
+    val memberRepository = MemberRepository()
+    val articleRepository = ArticleRepository()
+
     memberRepository.makeTestMembers()
     articleRepository.makeTestArticles()
 
@@ -342,7 +345,7 @@ data class Member(
 )
 
 // 회원 리포지터리
-object memberRepository {
+class MemberRepository {
     private val members = mutableListOf<Member>()
     private var lastId = 0
 
@@ -407,7 +410,7 @@ data class Article(
 )
 
 // 게시물 리포지터리
-object articleRepository {
+class ArticleRepository {
     private val articles = mutableListOf<Article>()
     private var lastId = 0
 
