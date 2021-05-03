@@ -1,17 +1,44 @@
 class BoardRepository {
-    val boards = mutableListOf(
-        Board(1, Util.getNowDateStr(), Util.getNowDateStr(), "공지", "notice"),
-        Board(2, Util.getNowDateStr(), Util.getNowDateStr(), "자유", "free")
-    )
+    private val boards = mutableListOf<Board>()
 
-    /*
-    @JvmName("getBoards1")
-    fun getBoards(): MutableList<Board> {
-        return boards
+    private var lastId = 0
+
+    fun makeTestBoards() {
+        makeBoard("공지", "notice")
+        makeBoard("자유", "free")
     }
-    */
 
     fun getFilteredBoards(): List<Board> {
         return boards
+    }
+
+    fun getBoardByName(name: String): Board? {
+        for (board in boards) {
+            if (board.name == name) {
+                return board
+            }
+        }
+
+        return null
+    }
+
+    fun getBoardByCode(code: String): Board? {
+        for (board in boards) {
+            if (board.code == code) {
+                return board
+            }
+        }
+
+        return null
+    }
+
+    fun makeBoard(name: String, code: String): Int {
+        val id = ++lastId
+        val regDate = Util.getNowDateStr()
+        val updateDate = Util.getNowDateStr()
+
+        boards.add(Board(id, regDate, updateDate, name, code))
+
+        return id
     }
 }

@@ -8,6 +8,7 @@ fun main() {
     println("== SIMPLE SSG 시작 ==")
 
     memberRepository.makeTestMembers()
+    boardRepository.makeTestBoards()
     articleRepository.makeTestArticles()
 
     val systemController = SystemController()
@@ -35,6 +36,9 @@ fun main() {
             }
             "/board/list" -> {
                 boardController.list(rq)
+            }
+            "/board/add" -> {
+                boardController.add(rq)
             }
             "/member/logout" -> {
                 memberController.logout(rq)
