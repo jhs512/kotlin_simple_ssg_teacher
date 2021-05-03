@@ -57,6 +57,10 @@ class ArticleRepository {
         boardCode: String,
         searchKeyword: String
     ): List<Article> {
+        if (boardCode.isEmpty() && searchKeyword.isEmpty()) {
+            return articles
+        }
+
         val filteredArticles = mutableListOf<Article>()
 
         val boardId = if (boardCode.isEmpty()) {
@@ -66,23 +70,19 @@ class ArticleRepository {
         }
 
         for (article in articles) {
-            var needToAdd = true
-
             if (boardId != 0) {
                 if (article.boardId != boardId) {
-                    needToAdd = false
+                    continue
                 }
             }
 
-            if (needToAdd && searchKeyword.isNotEmpty()) {
+            if (searchKeyword.isNotEmpty()) {
                 if (!article.title.contains(searchKeyword)) {
-                    needToAdd = false
+                    continue
                 }
             }
 
-            if (needToAdd) {
-                filteredArticles.add(article)
-            }
+            filteredArticles.add(article)
         }
 
         return filteredArticles
