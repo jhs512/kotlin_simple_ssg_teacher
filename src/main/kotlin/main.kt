@@ -16,6 +16,9 @@ fun main() {
     val articleController = ArticleController()
     val memberController = MemberController()
 
+    // 1번 회원으로 로그인 된 상태로 시작한다.
+    loginedMember = memberRepository.getMemberById(1)
+
     while (true) {
         val prompt = if (loginedMember == null) {
             "명령어) "
@@ -37,8 +40,8 @@ fun main() {
             "/board/list" -> {
                 boardController.list(rq)
             }
-            "/board/add" -> {
-                boardController.add(rq)
+            "/board/make" -> {
+                boardController.make(rq)
             }
             "/member/logout" -> {
                 memberController.logout(rq)
