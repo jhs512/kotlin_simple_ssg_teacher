@@ -1,10 +1,13 @@
 fun main() {
+    // 이런식으로 테스트 가능
+    //memberRepository.getMembers()
+
     //testWriteFile();
     //testWriteFile2();
     //testWriteFile3();
     //testReadFile();
     //testReadFile2();
-    testReadFile3();
+    //testReadFile3();
 }
 
 data class TestArticle(
