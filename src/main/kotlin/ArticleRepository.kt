@@ -36,7 +36,7 @@ class ArticleRepository {
     }
 
     fun getLastId(): Int {
-        val lastId = readIntFromFile("data/article/lastId.txt")
+        val lastId = readIntFromFile("data/article/lastId.txt", 0)
 
         return lastId
     }
@@ -55,7 +55,7 @@ class ArticleRepository {
         return article
     }
 
-    fun addArticle(boardId: Int, memberId: Int, title: String, body: String): Int {
+    fun writeArticle(boardId: Int, memberId: Int, title: String, body: String): Int {
         val id = getLastId() + 1
         val regDate = Util.getNowDateStr()
         val updateDate = Util.getNowDateStr()
@@ -73,7 +73,7 @@ class ArticleRepository {
     // 영속성 때문에, 이제는 그닥 필요 없을듯
     fun makeTestArticles() {
         for (id in 1..20) {
-            addArticle(id % 2 + 1, id % 9 + 1, "제목_$id", "내용_$id")
+            writeArticle(id % 2 + 1, id % 9 + 1, "제목_$id", "내용_$id")
         }
     }
 

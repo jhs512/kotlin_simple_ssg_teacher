@@ -10,12 +10,25 @@ class MemberRepository {
         cellphoneNo: String,
         email: String
     ): Int {
-        val id = ++lastId
+        val id = getLastId() + 1
         val regDate = Util.getNowDateStr()
         val updateDate = Util.getNowDateStr()
-        members.add(Member(id, regDate, updateDate, loginId, loginPw, name, nickname, cellphoneNo, email))
+        val member = Member(id, regDate, updateDate, loginId, loginPw, name, nickname, cellphoneNo, email)
+
+        writeStrFile("data/member/${member.id}.json", member.toJson())
+        setLastId(id)
 
         return id
+    }
+
+    fun getLastId(): Int {
+        val lastId = readIntFromFile("data/member/lastId.txt", 0)
+
+        return lastId
+    }
+
+    fun setLastId(newLastId: Int) {
+        writeIntFile("data/member/lastId.txt", newLastId)
     }
 
     fun isJoinableLoginId(loginId: String): Boolean {
@@ -49,5 +62,4 @@ class MemberRepository {
 
         return null
     }
-
 }

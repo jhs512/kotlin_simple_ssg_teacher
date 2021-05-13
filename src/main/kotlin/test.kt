@@ -41,7 +41,7 @@ data class TestArticle(
 
 fun testReadFile3() {
     writeIntFile("test/4.txt", 100)
-    val num = readIntFromFile("test/4.txt")
+    val num = readIntFromFile("test/4.txt", 0)
 
     println("num : $num")
 }
