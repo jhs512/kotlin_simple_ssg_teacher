@@ -9,11 +9,8 @@ var loginedMember: Member? = null
 fun main() {
     println("== SIMPLE SSG 시작 ==")
 
-    boardRepository.makeBoard("자유2", "free2")
-    exitProcess(0)
-
     // 이런식으로 테스트 가능
-    //memberRepository.getMembers()
+    //boardRepository.getBoards()
     //exitProcess(0)
 
     //memberRepository.makeTestMembers()
