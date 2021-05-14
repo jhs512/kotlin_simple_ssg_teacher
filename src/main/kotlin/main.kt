@@ -21,6 +21,7 @@ fun main() {
     val boardController = BoardController()
     val articleController = ArticleController()
     val memberController = MemberController()
+    val ssgController = SsgController()
 
     // 1번 회원으로 로그인 된 상태로 시작한다.
     loginedMember = memberRepository.getMemberById(1)
@@ -42,6 +43,9 @@ fun main() {
                 systemController.exit(rq)
 
                 break
+            }
+            "/ssg/build" -> {
+                ssgController.build(rq)
             }
             "/board/list" -> {
                 boardController.list(rq)
