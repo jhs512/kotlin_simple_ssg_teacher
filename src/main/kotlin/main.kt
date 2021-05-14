@@ -1,3 +1,5 @@
+import kotlin.system.exitProcess
+
 val memberRepository = MemberRepository()
 val articleRepository = ArticleRepository()
 val boardRepository = BoardRepository()
@@ -7,12 +9,15 @@ var loginedMember: Member? = null
 fun main() {
     println("== SIMPLE SSG 시작 ==")
 
+    boardRepository.makeBoard("자유2", "free2")
+    exitProcess(0)
+
     // 이런식으로 테스트 가능
     //memberRepository.getMembers()
     //exitProcess(0)
 
     //memberRepository.makeTestMembers()
-    boardRepository.makeTestBoards()
+    //boardRepository.makeTestBoards()
     //articleRepository.makeTestArticles()
 
     val systemController = SystemController()
